@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task and Project Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            background-color: #f4f4f4;
+
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            background-color: #f6efef;
+            margin-top: 10px;
+            padding-top: 30px;
+            text-align: center;
+            color: #3c3838;
+        }
+
+        .sidebar a, .sidebar button {
+            margin-top: 50px;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #242424;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .sidebar button {
+            background-color: #3498db;
+            cursor: pointer;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .column {
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(97, 96, 96, 0.1);
+            width: 200px;
+            margin: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+
+
+
+
+
+
+
+        .menu-bar {
+            background-color: #f7f2f2;
+            overflow: hidden;
+            min-width: 1cm;
+            position: fixed;
+            width: 100%;
+            top: 0;
+        }
+
+        .menu-bar a {
+            float: left;
+            display: block;
+            color: #464343;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .menu-bar a:hover {
+            background-color: #f3ecec;
+            color: black;
+        }
+
+        .content {
+            padding: 20px;
+            padding-top: 2cm; /* Adjust padding to keep content separate from the menu bar */
+            margin-top: 1cm; /* Add margin-top to prevent content from starting at the very top */
+            margin-left: 1cm; /* Add margin to the left to prevent content from overlapping the sidebar */
+            margin-right: 1cm; /* Add margin to the right to prevent content from overlapping the sidebar */
+        }
+
+     
+
+
+    </style>
+</head>
+<body>
+
+
+    <div class="menu-bar">
+        <a href="#home">Task Boards</a>
+        <a href="#about">                Freelance Project</a>
+      
+    </div>
+
+
+
+    <div class="container">
+        <div class="sidebar">
+            <a href="#">Freelance Project</a>
+            <a href="#">SBI Outsource</a>
+            <a href="#">HPCL Project1</a>
+            <button onclick="openModal('project')">+ Add new Project</button>
+        </div>
+
+        <div class="content">
+            <div class="column" id="todo">
+                <h2>To Do</h2>
+                <button onclick="openModal('todo')">+ Add new</button>
+            </div>
+
+            <div class="column" id="inProgress">
+                <h2>In Progress</h2>
+                <button onclick="openModal('inProgress')">+ Add new</button>
+            </div>
+
+            <div class="column" id="inReview">
+                <h2>In Review</h2>
+                <button onclick="openModal('inReview')">+ Add new</button>
+            </div>
+
+            <div class="column" id="completed">
+                <h2>Completed</h2>
+                <button onclick="openModal('completed')">+ Add new</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Add New Task</h3>
+            <label for="work">Work:</label>
+            <input type="text" id="work">
+            <br>
+            <label for="date">Date:</label>
+            <input type="date" id="date">
+            <br>
+            <label for="completedDate">Completed Date:</label>
+            <input type="date" id="completedDate">
+            <br>
+            <button onclick="saveTask()">Save</button>
+        </div>
+    </div>
+
+    <script>
+        let tasks = {
+            todo: [],
+            inProgress: [],
+            inReview: [],
+            completed: [],
+        };
+
+        let projects = ['Freelance Project', 'SBI Outsource', 'HPCL Project1'];
+
+        function openModal(type) {
+            document.getElementById('myModal').style.display = 'block';
+            if (type === 'project') {
+                document.getElementById('modalTitle').innerText = 'Add New Project';
+            } else {
+                document.getElementById('modalTitle').innerText = 'Add New Task';
+            }
+            document.getElementById('myModal').dataset.type = type;
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function saveTask() {
+            const type = document.getElementById('myModal').dataset.type;
+            const work = document.getElementById('work').value;
+        }
+        
+    </script>
+</body>
+</html>
